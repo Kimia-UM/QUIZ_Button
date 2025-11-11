@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - Kompetisi Cepat Tepat</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      .float-animation {
+        animation: float 3s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div
+      class="glass-effect rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-md"
+    >
+      <div class="text-center mb-8">
+        <div
+          class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-red-500 to-orange-500 rounded-full mb-4 float-animation"
+        >
+          <i data-feather="shield" class="w-10 h-10 text-white"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Admin Panel</h1>
+        <p class="text-gray-600">Masuk sebagai administrator</p>
+      </div>
+
+      <form id="adminLoginForm" class="space-y-6">
+        <!-- Email Input -->
+        <div>
+          <label
+            for="adminEmail"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Email
+          </label>
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i data-feather="mail" class="w-5 h-5 text-gray-400"></i>
+            </div>
+            <input
+              type="email"
+              id="adminEmail"
+              name="adminEmail"
+              required
+              placeholder="Masukkan email admin"
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all duration-200"
+            />
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div>
+          <label
+            for="adminPassword"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Password
+          </label>
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <i data-feather="lock" class="w-5 h-5 text-gray-400"></i>
+            </div>
+            <input
+              type="password"
+              id="adminPassword"
+              name="adminPassword"
+              required
+              placeholder="Masukkan password"
+              class="pl-10 w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all duration-200"
+            />
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-red-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 shadow-lg"
+        >
+          <span class="flex items-center justify-center">
+            <i data-feather="log-in" class="w-5 h-5 mr-2"></i>
+            Masuk ke Admin Panel
+          </span>
+        </button>
+
+        <!-- Back to Login -->
+        <a
+          href="index.html"
+          class="w-full inline-flex items-center justify-center bg-gray-100 text-gray-700 font-medium py-3 px-4 rounded-xl hover:bg-gray-200 transition-all duration-200"
+        >
+          <i data-feather="arrow-left" class="w-5 h-5 mr-2"></i>
+          Kembali ke Login
+        </a>
+      </form>
+
+      <!-- Error Message -->
+      <div
+        id="errorMessage"
+        class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-xl"
+      >
+        <p class="text-red-600 text-sm flex items-center">
+          <i data-feather="alert-circle" class="w-4 h-4 mr-2"></i>
+          <span id="errorText"></span>
+        </p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      feather.replace();
+
+      // Admin credentials (hardcoded for security - in production, use backend authentication)
+      const ADMIN_EMAIL = "admin123@gmail.com";
+      const ADMIN_PASSWORD = "adminganteng";
+
+      document
+        .getElementById("adminLoginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("adminEmail").value.trim();
+          const password = document.getElementById("adminPassword").value;
+          const errorMessage = document.getElementById("errorMessage");
+          const errorText = document.getElementById("errorText");
+          const button = this.querySelector("button[type='submit']");
+
+          // Validate inputs
+          if (!email || !password) {
+            errorText.textContent = "Email dan password harus diisi";
+            errorMessage.classList.remove("hidden");
+            return;
+          }
+
+          if (email !== ADMIN_EMAIL) {
+            errorText.textContent = "Email tidak valid";
+            errorMessage.classList.remove("hidden");
+            return;
+          }
+
+          if (password !== ADMIN_PASSWORD) {
+            errorText.textContent = "Password tidak valid";
+            errorMessage.classList.remove("hidden");
+            return;
+          }
+
+          // Disable button during submission
+          const originalHTML = button.innerHTML;
+          button.disabled = true;
+          button.innerHTML = `
+            <span class="flex items-center justify-center">
+              <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Sedang Masuk...
+            </span>
+          `;
+
+          // Simulate login process
+          setTimeout(() => {
+            // Set admin session
+            localStorage.setItem("adminLoggedIn", "true");
+            localStorage.setItem("adminEmail", email);
+
+            // Show success message
+            showToast("Login admin berhasil!", "success");
+
+            // Redirect to admin panel after 1 second
+            setTimeout(() => {
+              window.location.href = "admin.html";
+            }, 1000);
+          }, 500);
+        });
+
+      function showToast(message, type = "info") {
+        let toast = document.getElementById("toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "toast";
+          toast.className = "fixed bottom-4 right-4 z-50";
+          document.body.appendChild(toast);
+        }
+
+        toast.innerHTML = `
+          <div class="bg-white rounded-lg shadow-xl p-4 flex items-center space-x-3 min-w-[300px]">
+            <div id="toastIcon"></div>
+            <div>
+              <p id="toastMessage" class="font-medium text-gray-800"></p>
+            </div>
+          </div>
+        `;
+
+        const toastMessage = toast.querySelector("#toastMessage");
+        const toastIcon = toast.querySelector("#toastIcon");
+
+        toastMessage.textContent = message;
+
+        if (type === "success") {
+          toastIcon.innerHTML =
+            '<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+        } else if (type === "error") {
+          toastIcon.innerHTML =
+            '<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+        }
+
+        setTimeout(() => {
+          toast.innerHTML = "";
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
