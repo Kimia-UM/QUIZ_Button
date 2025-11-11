@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kompetisi - Siswa</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .pulse-button {
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 30px rgba(147, 51, 234, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+        }
+      }
+      .shake {
+        animation: shake 0.5s;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+      .success-bounce {
+        animation: bounce 0.5s;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+      .countdown-warning {
+        animation: flash 1s infinite;
+      }
+      @keyframes flash {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+    </style>
+  </head>
+  <body class="gradient-bg min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white/10 backdrop-blur-md border-b border-white/20">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div
+              class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center"
+            >
+              <i data-feather="zap" class="w-6 h-6 text-white"></i>
+            </div>
+            <h1 class="text-white font-bold text-xl">Kompetisi Cepat Tepat</h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-white/80 text-sm">Selamat datang,</span>
+            <span
+              id="displayName"
+              class="text-white font-semibold bg-white/20 px-4 py-2 rounded-full"
+            ></span>
+            <button
+              onclick="logout()"
+              class="text-white/80 hover:text-white transition-colors"
+            >
+              <i data-feather="log-out" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center p-4">
+      <div class="text-center">
+        <!-- Status Round -->
+        <div id="roundStatus" class="mb-8">
+          <div
+            class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full"
+          >
+            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <span class="text-white font-medium">Ronde Aktif - Siap!</span>
+          </div>
+        </div>
+
+        <!-- Winner Display -->
+        <div id="winnerDisplay" class="hidden mb-8">
+          <div class="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-auto">
+            <div class="flex items-center justify-center mb-4">
+              <i data-feather="award" class="w-16 h-16 text-yellow-500"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+              Pemenang Ronde Ini:
+            </h2>
+            <p
+              id="winnerName"
+              class="text-3xl font-bold text-purple-600 mb-2"
+            ></p>
+            <p id="winnerTime" class="text-gray-600"></p>
+          </div>
+        </div>
+
+        <!-- Main Button -->
+        <div class="mb-8">
+          <button
+            id="pressButton"
+            onclick="pressButton()"
+            class="relative w-64 h-64 md:w-80 md:h-80 bg-gradient-to-br from-green-400 to-blue-500 rounded-full shadow-2xl hover:from-green-500 hover:to-blue-600 transform hover:scale-105 transition-all duration-200 pulse-button disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            <span
+              class="absolute inset-0 flex flex-col items-center justify-center text-white"
+            >
+              <i
+                data-feather="target"
+                class="w-20 h-20 md:w-24 md:h-24 mb-4"
+              ></i>
+              <span class="text-2xl md:text-3xl font-bold">TEKAN SAYA!</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Message Display -->
+        <div id="messageDisplay" class="hidden">
+          <div class="bg-white rounded-xl p-6 shadow-xl max-w-md mx-auto">
+            <p id="messageText" class="text-lg font-medium text-gray-800"></p>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="mt-8 text-white/80 text-sm">
+          <p class="mb-2">🎯 Tekan tombol sesegera mungkin!</p>
+          <p>🏆 Siswa tercepat akan menjadi pemenang</p>
+          <p>⏳ Tunggu reset dari admin untuk ronde berikutnya</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/10 backdrop-blur-md border-t border-white/20 py-4">
+      <div class="container mx-auto px-4 text-center text-white/80 text-sm">
+        <p>Kompetisi Cepat Tepat © 2024</p>
+      </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+    <script>
+      feather.replace();
+
+      // Check login status
+      const studentName = localStorage.getItem("studentName");
+      if (!studentName) {
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("displayName").textContent = studentName;
+      }
+
+      // Listen for winner updates
+      database.ref("round/winner").on("value", (snapshot) => {
+        const data = snapshot.val();
+        const button = document.getElementById("pressButton");
+        const messageDisplay = document.getElementById("messageDisplay");
+        const messageText = document.getElementById("messageText");
+        const winnerDisplay = document.getElementById("winnerDisplay");
+        const winnerName = document.getElementById("winnerName");
+        const winnerTime = document.getElementById("winnerTime");
+        const roundStatus = document.getElementById("roundStatus");
+
+        if (data) {
+          // Winner exists - disable button
+          button.disabled = true;
+          button.classList.remove("pulse-button");
+
+          // Show winner info
+          winnerDisplay.classList.remove("hidden");
+          winnerName.textContent = data.name;
+          const time = new Date(data.timestamp);
+          winnerTime.textContent = `Waktu: ${time.toLocaleTimeString("id-ID")}`;
+
+          // Show message to current user
+          messageDisplay.classList.remove("hidden");
+          if (data.name === studentName) {
+            messageText.textContent =
+              "🎉 Selamat! Anda adalah pemenang ronde ini!";
+            messageDisplay.querySelector("div").className =
+              "bg-green-50 border-2 border-green-300 rounded-xl p-6 shadow-xl max-w-md mx-auto success-bounce";
+          } else {
+            messageText.textContent =
+              "Ronde sudah selesai, tunggu reset dari admin.";
+            messageDisplay.querySelector("div").className =
+              "bg-yellow-50 border-2 border-yellow-300 rounded-xl p-6 shadow-xl max-w-md mx-auto";
+          }
+
+          // Update status
+          roundStatus.innerHTML = `
+                    <div class="inline-flex items-center space-x-2 bg-red-500/20 backdrop-blur-sm px-6 py-3 rounded-full countdown-warning">
+                        <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <span class="text-white font-medium">Ronde Selesai</span>
+                    </div>
+                `;
+        } else {
+          // No winner - enable button
+          button.disabled = false;
+          button.classList.add("pulse-button");
+          messageDisplay.classList.add("hidden");
+          winnerDisplay.classList.add("hidden");
+
+          // Update status
+          roundStatus.innerHTML = `
+                    <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full">
+                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <span class="text-white font-medium">Ronde Aktif - Siap!</span>
+                    </div>
+                `;
+        }
+      });
+
+      function pressButton() {
+        const button = document.getElementById("pressButton");
+        if (button.disabled) return;
+
+        // Check if winner already exists
+        database
+          .ref("round/winner")
+          .once("value")
+          .then((snapshot) => {
+            if (!snapshot.exists()) {
+              // No winner yet - this student wins
+              database.ref("round/winner").set({
+                name: studentName,
+                timestamp: Date.now(),
+              });
+
+              // Add animation to button
+              button.classList.add("success-bounce");
+              setTimeout(() => {
+                button.classList.remove("success-bounce");
+              }, 500);
+            } else {
+              // Too late
+              button.classList.add("shake");
+              setTimeout(() => {
+                button.classList.remove("shake");
+              }, 500);
+            }
+          });
+      }
+
+      function logout() {
+        localStorage.removeItem("studentName");
+        window.location.href = "index.html";
+      }
+
+      // Prevent accidental navigation
+      window.addEventListener("beforeunload", (e) => {
+        e.preventDefault();
+        e.returnValue = "";
+      });
+    </script>
+  </body>
+</html>
